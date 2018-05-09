@@ -41,9 +41,11 @@ public class GithubScheduler {
 
     @PostConstruct
     public void start() {
-        String apiToken = env.getProperty("apiToken");
-        Assert.notNull(apiToken, "apiToken must be present");
-        collector = new GithubCollector(apiToken);
+        String username = env.getProperty("username");
+        Assert.notNull(username, "username must be present");
+        String personalAccessToken = env.getProperty("personalAccessToken");
+        Assert.notNull(personalAccessToken, "personalAccessToken must be present");
+        collector = new GithubCollector(username, personalAccessToken);
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleWithFixedDelay(this::collectLatest, 0, 10, TimeUnit.SECONDS);
         LOG.info("scheduler started");

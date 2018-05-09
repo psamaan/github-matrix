@@ -12,8 +12,9 @@ public class GithubCollectorTest {
 
     @Test
     public void testFetchLatestCommits() throws Exception {
-        String apiToken = System.getProperty("apiToken");
-        GithubCollector repo = new GithubCollector(apiToken);
+        String personalAccessToken = System.getProperty("personalAccessToken");
+        String username = System.getProperty("username");
+        GithubCollector repo = new GithubCollector(username, personalAccessToken);
         List<Drop> drops = repo.collect();
         assertThat(drops, not(empty()));
     }

@@ -28,14 +28,15 @@ public class GithubCollector {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private final String apiToken;
+    private final String personalAccessToken;
 
-    public GithubCollector(String apiToken) {
-        this.apiToken = apiToken;
+    public GithubCollector(String username, String personalAccessToken) {
+        this.personalAccessToken = personalAccessToken;
+        this.username = username;
     }
 
     public List<Drop> collect() {
-        String url = "https://api.github.com/events";
+        String url = "https://api.github.com/users/" + username + "/received_events";
         ResponseEntity<String> response = get(url);
         return parseResponse(response.getBody());
     }
@@ -137,7 +138,7 @@ public class GithubCollector {
     }
 
     private HttpHeaders createAuthHeaders() {
-        String plainCreds = apiToken + ":x-oauth-basic";
+        String plainCreds = username + ":" + personalAccessToken;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
